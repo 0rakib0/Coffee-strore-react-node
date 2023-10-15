@@ -15,10 +15,10 @@ const Coffee = ({coffee}) =>{
                 <h4 className="md:text-md md:mt-4">Chef: {chef}</h4>
                 <p className="md:text-md md:mt-4">Price: {price}</p>         
             </div>
-            <div className="md:ml-24">
-                <AiFillEye></AiFillEye>
-                <AiTwotoneEdit></AiTwotoneEdit>
-                <AiFillDelete></AiFillDelete>
+            <div className="md:ml-24 space-y-2">
+                <AiFillEye className="bg-[#D2B48C] text-white text-3xl p-2"></AiFillEye>
+                <AiTwotoneEdit className="bg-[#3C393B] text-white text-3xl p-2"></AiTwotoneEdit>
+                <AiFillDelete className="bg-[#EA4744] text-white text-3xl p-2"></AiFillDelete>
             </div>
         </div>
     )
