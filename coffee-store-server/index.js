@@ -1,5 +1,5 @@
 const express = require('express')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express()
 const cors = require('cors')
 const port = process.env.POST || 5000
@@ -37,6 +37,14 @@ async function run() {
             const data = await cursor.toArray()
             res.send(data)
 
+        })
+
+        app.get('/coffee/:id', async(req, res) =>{
+            const Id = req.params.id;
+            const quary = {_id: new ObjectId(Id)}
+            console.log(quary)
+            const result = await coffeeCollection.findOne(quary)
+            res.send(result)
         })
 
         app.post('/coffee', async(req, res) =>{
