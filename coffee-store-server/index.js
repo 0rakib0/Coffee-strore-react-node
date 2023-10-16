@@ -28,43 +28,71 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
 
-        const database = client.db("CoffeeDB");
-        const coffeeCollection = database.collection("coffees");
+        const coffeeCollection = client.db("CoffeeDB").collection("coffees");
+        const UserCollection = client.db("CoffeeDB").collection("Users");
 
 
-        app.get('/coffee', async(req, res) =>{
+        app.get('/coffee', async (req, res) => {
             const cursor = coffeeCollection.find()
             const data = await cursor.toArray()
             res.send(data)
 
         })
 
-        app.get('/coffee/:id', async(req, res) =>{
+        app.get('/coffee/:id', async (req, res) => {
             const Id = req.params.id;
             console.log(Id)
-            const quary = {_id: new ObjectId (Id) }
+            const quary = { _id: new ObjectId(Id) }
             console.log(quary)
             const result = await coffeeCollection.findOne(quary)
             res.send(result)
         })
 
-        app.delete('/coffee/:id', async(req, res) =>{
+        app.delete('/coffee/:id', async (req, res) => {
             const Id = req.params.id;
-            const quary = {_id: new ObjectId (Id) }
+            const quary = { _id: new ObjectId(Id) }
             const result = await coffeeCollection.deleteOne(quary)
             res.send(result)
 
         })
 
-        app.put('/coffee/:id', async(req, res) =>{
+        app.put('/coffee/:id', async (req, res) => {
             const Id = req.params.id;
-            console.log(Id)
+            const UpdatedData = req.body
+            const filter = { _id: new ObjectId(Id) }
+            const options = { upsert: true }
+            const coffee = {
+                $set: {
+                    name: UpdatedData.name,
+                    supplier: UpdatedData.supplier,
+                    price: UpdatedData.price,
+                    details: UpdatedData.details,
+                    photo: UpdatedData.photo,
+                    category: UpdatedData.category
+                }
+            }
+            const result = await coffeeCollection.updateOne(filter, coffee, options)
+            res.send(result)
+
+
         })
 
-        app.post('/coffee', async(req, res) =>{
-                const coffees = req.body;
-                const result = await coffeeCollection.insertOne(coffees)
-                res.send(result)
+        app.post('/coffee', async (req, res) => {
+            const coffees = req.body;
+            const result = await coffeeCollection.insertOne(coffees)
+            res.send(result)
+        })
+
+        app.get('/user', async(req, res) =>{
+            const cursor = UserCollection.find()
+            const Data = await cursor.toArray()
+            res.send(Data)
+        })
+
+        app.post('/user', async (req, res) => {
+            const user = req.body;
+            const result = await UserCollection.insertOne(user)
+            res.send(result)
         })
 
 
