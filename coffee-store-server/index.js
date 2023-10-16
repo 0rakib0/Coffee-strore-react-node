@@ -41,10 +41,24 @@ async function run() {
 
         app.get('/coffee/:id', async(req, res) =>{
             const Id = req.params.id;
-            const quary = {_id: new ObjectId(Id)}
+            console.log(Id)
+            const quary = {_id: new ObjectId (Id) }
             console.log(quary)
             const result = await coffeeCollection.findOne(quary)
             res.send(result)
+        })
+
+        app.delete('/coffee/:id', async(req, res) =>{
+            const Id = req.params.id;
+            const quary = {_id: new ObjectId (Id) }
+            const result = await coffeeCollection.deleteOne(quary)
+            res.send(result)
+
+        })
+
+        app.put('/coffee/:id', async(req, res) =>{
+            const Id = req.params.id;
+            console.log(Id)
         })
 
         app.post('/coffee', async(req, res) =>{
@@ -52,6 +66,8 @@ async function run() {
                 const result = await coffeeCollection.insertOne(coffees)
                 res.send(result)
         })
+
+
 
 
 
