@@ -1,7 +1,7 @@
 import { Link, useLoaderData } from "react-router-dom";
-
+import { AiFillDelete } from "react-icons/ai";
 import { FaArrowLeft } from "react-icons/fa";
-import User from "./User";
+import Swal from "sweetalert2";
 
 const AllUser = () => {
 
@@ -10,6 +10,39 @@ const AllUser = () => {
     const textShadowStyle = {
         textShadow: '2px 2px 2px rgba(0, 0, 0, 0.5)', // Customize the shadow properties as needed
     };
+
+    const handleDelete = id => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You Want to Delete This user!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`http://localhost:5000/user/${id}`, {
+                    method: 'DELETE'
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.deleteCount >0){
+                            Swal.fire(
+                                'User Successfully Deleted!',
+                                'your argeted user deleted',
+                                'success'
+                              )
+                        }
+                    })
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )
+            }
+        })
+    }
     return (
         <div>
             <Link to='/'><h1 className="text-2xl flex items-center gap-2 font-Rancho font-semibold ml-12 md:ml-44 mt-6"><span><FaArrowLeft></FaArrowLeft></span> Back To Home</h1></Link>
@@ -29,10 +62,10 @@ const AllUser = () => {
                                             <input type="checkbox" className="checkbox" />
                                         </label>
                                     </th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Created At</th>
-                                    <th>Action</th>
+                                    <th className="text-xl font-bold">Name</th>
+                                    <th className="text-xl font-bold">Email</th>
+                                    <th className="text-xl font-bold">Created At</th>
+                                    <th className="text-xl font-bold">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -62,7 +95,7 @@ const AllUser = () => {
                                         </td>
                                         <td>10/10/23</td>
                                         <th>
-                                            <button className="btn btn-ghost btn-xs">details</button>
+                                            <AiFillDelete onClick={() => handleDelete(u._id)} className="bg-[#EA4744] text-white text-3xl p-2"></AiFillDelete>
                                         </th>
                                     </tr>)
                                 }

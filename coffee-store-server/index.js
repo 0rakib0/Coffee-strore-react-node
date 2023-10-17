@@ -89,6 +89,13 @@ async function run() {
             res.send(Data)
         })
 
+        app.delete('/user/:id', async(req, res) =>{
+            const Id = req.params.id
+            const quary = {_id: new ObjectId (Id)}
+            const result = await UserCollection.deleteOne(quary)
+            res.send(result)
+        })
+
         app.post('/user', async (req, res) => {
             const user = req.body;
             const result = await UserCollection.insertOne(user)
